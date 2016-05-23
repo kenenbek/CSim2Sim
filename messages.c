@@ -21,12 +21,21 @@ msg_task_t task_message_new(char *name, message_type type, const char *downloadf
     return task;
 }
 
-msg_task_t give_me_data(char *name, message_type type, double flops_amount, double size){
+msg_task_t give_me_data(const char *name, double flops_amount, double size){
     message_t message = xbt_new(s_message_t, 1);
-    message->type = type;
+    message->type = GIVEMEDATA;
     message->size_data = size;
     message->flops_amount = flops_amount;
     msg_task_t  task = MSG_task_create(name, 0, MESSAGES_SIZE_GIVEMEDATA, message);
+    return task;
+}
+
+msg_task_t send_data(const char *name, double flops_amount, double size){
+    message_t message = xbt_new(s_message_t, 1);
+    message->type = DOWNLOADED;
+    message->size_data = size;
+    message->flops_amount = flops_amount;
+    msg_task_t  task = MSG_task_create(name, flops_amount, size, message);
     return task;
 }
 
@@ -39,8 +48,6 @@ int task_message_size(message_type type){
         case GIVEMEDATA:
             size = MESSAGES_SIZE_GIVEMEDATA;
             break;
-        case FINALIZE:
-            size = MESSAGES_SIZE_FINALIZE;
     }
     return size;
 }

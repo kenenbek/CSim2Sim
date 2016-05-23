@@ -14,7 +14,6 @@
 typedef enum {
     INSTRUCTION,
     GIVEMEDATA,
-    FINALIZE,
     DOWNLOADED
 } message_type;
 
@@ -26,7 +25,8 @@ typedef struct s_message{
 } s_message_t, *message_t;
 
 msg_task_t task_message_new(char *name, message_type type, const char *downloadfrom, double size);
-msg_task_t give_me_data(char *name, message_type type, double flops_amount, double size);
+msg_task_t give_me_data(const char *name, double flops_amount, double size);
+msg_task_t send_data(const char *name, double flops_amount, double size);
 
 void task_message_free(void *);
 int task_message_size(message_type type);

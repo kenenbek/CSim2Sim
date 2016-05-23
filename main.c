@@ -20,6 +20,9 @@ int scheduler(int argc, char *argv[]){
 int dispatcher(int argc, char *argv[]){
     int num = xbt_str_parse_int(argv[1], "Invalid argument %s");
     int number_tiers = xbt_str_parse_int(argv[2], "Invalid argument %s");
+
+    MSG_process_create()
+
     return 0;
 }
 
@@ -74,6 +77,7 @@ int main(int argc, char *argv[]){
     MSG_create_environment(argv[1]);
 
     MSG_function_register("scheduler", scheduler);
+    MSG_function_register("dispatcher", dispatcher);
     MSG_function_register("tier1", tier1);
     MSG_launch_application(argv[2]);
 

@@ -13,6 +13,28 @@ int scheduler(int argc, char *argv[]){
 
 }
 
+int tier1(int argc, char *argv[]){
+    msg_task_t task = NULL;
+    char mailbox[80];
+
+    int num = xbt_str_parse_int(argv[1], "Invalid argument %s");
+    int id = xbt_str_parse_int(argv[2], "Invalid argument %s");
+
+    sprintf(mailbox, "tier1_%i_%i", num, id);
+
+    while(1){
+        int res = MSG_task_receive(&task, mailbox);
+        xbt_assert(res == MSG_OK, "MSG_task_get failes");
+
+        if(!strcmp(MSG_task_get_name(task), "finalize")){
+            MSG_task_destroy(task);
+            break;
+        }
+        if(!strcmp(MSG_task_get_name(task)))
+    }
+
+ }
+
 int main(int argc, char *argv[]){
     MSG_init(&argc, argv);
 

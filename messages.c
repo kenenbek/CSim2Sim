@@ -21,10 +21,11 @@ msg_task_t task_message_new(char *name, message_type type, const char *downloadf
     return task;
 }
 
-msg_task_t give_me_data(char *name, message_type type, double size){
+msg_task_t give_me_data(char *name, message_type type, double flops_amount, double size){
     message_t message = xbt_new(s_message_t, 1);
     message->type = type;
     message->size_data = size;
+    message->flops_amount = flops_amount;
     msg_task_t  task = MSG_task_create(name, 0, MESSAGES_SIZE_GIVEMEDATA, message);
     return task;
 }

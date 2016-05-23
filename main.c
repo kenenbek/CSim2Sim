@@ -35,11 +35,23 @@ int tier1(int argc, char *argv[]){
         }
         message_t message = MSG_task_get_data(task);
         switch (message->type){
+            case INSTRUCTION:
+                if (!strcmp(message->downloadfrom, MSG_host_by_name(MSG_host_self()))){
+                    MSG_task_execute(task);
+                    MSG_task_destroy(task);
+                } else{
+                    msg_task_t gtask = give_me_data(MSG_task_get_name(task), GIVEMEDATA, MSG_task_get_bytes_amount(task));
+                }
+
+                break;
             case GIVEMEDATA:
                 break;
-            case INSTRUCTION:
+            case DOWNLOADED:
+                MSG_task_execute(task);
+                MSG_task_destroy(task);
                 break;
         }
+        task = NULL;
     }
 
  }

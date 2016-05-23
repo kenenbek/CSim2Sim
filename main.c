@@ -3,6 +3,9 @@
 //
 
 #include <simgrid/msg.h>
+#include "messages.h"
+
+
 int scheduler(int argc, char *argv[]);
 int tier1(int argc, char *argv[]);
 
@@ -30,7 +33,13 @@ int tier1(int argc, char *argv[]){
             MSG_task_destroy(task);
             break;
         }
-        if(!strcmp(MSG_task_get_name(task)))
+        message_t message = MSG_task_get_data(task);
+        switch (message->type){
+            case GIVEMEDATA:
+                break;
+            case INSTRUCTION:
+                break;
+        }
     }
 
  }

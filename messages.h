@@ -24,6 +24,14 @@ typedef struct s_message{
     double flops_amount;
 } s_message_t, *message_t;
 
+typedef struct {
+    msg_host_t host;
+} pilot;
+
+typedef struct {
+    xbt_dynar_t dynar_t;
+} mega_pilot;
+
 msg_task_t task_message_new(char *name, message_type type, const char *downloadfrom, double size);
 msg_task_t give_me_data(const char *name, double flops_amount, double size);
 msg_task_t send_data(const char *name, double flops_amount, double size);

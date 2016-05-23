@@ -17,7 +17,7 @@ int tier_sender_downloader(int argc, char *argv[]){
     sprintf(mailbox, "tier1_%i_%i", num, id);
 
     while (1){
-        
+
         if(!strcmp(MSG_task_get_name(task), "finalize")){
             MSG_task_destroy(task);
             break;

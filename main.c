@@ -17,14 +17,6 @@ int scheduler(int argc, char *argv[]){
 
 }
 
-int dispatcher(int argc, char *argv[]){
-    int num = xbt_str_parse_int(argv[1], "Invalid argument %s");
-    int number_tiers = xbt_str_parse_int(argv[2], "Invalid argument %s");
-
-    MSG_process_create()
-
-    return 0;
-}
 
 int tier1(int argc, char *argv[]){
     msg_task_t task = NULL;

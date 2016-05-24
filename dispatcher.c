@@ -43,7 +43,6 @@ int from_scheduler_to_tier(int argc, char *argv[]){
         xbt_dict_free(&map);
     }
 
-
     return 0;
 }
 
@@ -74,7 +73,6 @@ int from_tier_to_scheduler(int argc, char *argv[]){
             xbt_dynar_free(&dynar); // free size
         }
     }
-
 
     return 0;
 }

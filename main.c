@@ -13,11 +13,6 @@ int dispatcher(int argc, char *argv[]);
 XBT_LOG_NEW_DEFAULT_CATEGORY(msg_app_masterworker, "Messages specific for this msg example");
 
 
-int scheduler(int argc, char *argv[]){
-
-}
-
-
 int tier1(int argc, char *argv[]){
     msg_task_t task = NULL;
     msg_task_t data = NULL;

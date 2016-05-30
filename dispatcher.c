@@ -4,7 +4,7 @@
 #include <simgrid/msg.h>
 #include "messages.h"
 
-XBT_LOG_NEW_DEFAULT_CATEGORY(sender_downloader, "messsages specific for sending and downloading");
+XBT_LOG_NEW_DEFAULT_CATEGORY(dispatcher, "messsages specific for dispatching");
 
 int dispatcher(int argc, char *argv[]){
 

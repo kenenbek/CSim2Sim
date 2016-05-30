@@ -5,6 +5,12 @@
 #include <simgrid/msg.h>
 #include <csvparser.h>
 
+int comparator(void *a, void *b){
+    msg_host_t hostA = *(msg_host_t*) a;
+    msg_host_t hostB = *(msg_host_t*) b;
+    return MSG_host_get_speed(hostA) < MSG_host_get_speed(hostB);
+}
+
 
 int scheduler(int argc, char* argv[]){
 
@@ -50,8 +56,21 @@ int scheduler(int argc, char* argv[]){
     CsvParser_destroy(csvparser);
 
 
+    char mailbox[30];
+    msg_task_t task;
+    int id = xbt_str_parse_int(argv[1], "Invalid argument %s");
+    sprintf(mailbox, "scheduler");
 
-    
+    while (1){
+        int res = MSG_task_receive(&task, mailbox);
+
+        if(!strcmp(MSG_task_get_name(task), "finalize")){
+            MSG_task_destroy(task);
+            break;
+        }
+
+    }
+
     return 0;
 
 }

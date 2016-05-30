@@ -1,0 +1,1 @@
+mvn install:install-file -Dfile=simgrid(2).jar -DgroupId=LHCb -DartifactId=Sim2Sim -Dversion=3.12 -Dpackaging=jar -DgeneratePom=true

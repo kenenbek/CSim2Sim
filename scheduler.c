@@ -162,7 +162,7 @@ int scheduler(int argc, char* argv[]){
         sprintf(destination, "%s_%s", MSG_host_get_name(MSG_task_get_source(task)), "ST");
         xbt_dynar_t dynar = MSG_task_get_data(task);
         XBT_INFO("kokoko");
-        //xbt_dynar_sort(dynar, comparator);
+        xbt_dynar_sort(dynar, comparator);
 
         xbt_dict_t map = match_task(&dynar);
         XBT_INFO("Start send after matching to %s", destination);

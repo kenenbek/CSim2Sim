@@ -52,7 +52,7 @@ static int from_tier_to_scheduler(int argc, char **argv){
 
     int id = xbt_str_parse_int(argv[1], "Invalid argument %s");
 
-    xbt_dynar_t dynar = xbt_dynar_new(sizeof(char*), NULL);
+
 
     sprintf(mailbox, "dispatcher1_%i_TS", id);
 
@@ -64,7 +64,7 @@ static int from_tier_to_scheduler(int argc, char **argv){
             MSG_task_destroy(task);
             break;
         }
-
+        xbt_dynar_t dynar = xbt_dynar_new(sizeof(char*), NULL);
         const char * host_name = MSG_host_get_name(MSG_task_get_source(task));
         xbt_dynar_push(dynar, &host_name);
 

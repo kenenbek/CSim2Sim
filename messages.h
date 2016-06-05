@@ -13,6 +13,7 @@
 #define MESSAGES_SIZE 1
 
 typedef enum {
+    MONTE_CARLO,
     INSTRUCTION,
     GIVEMEDATA,
     DOWNLOADED

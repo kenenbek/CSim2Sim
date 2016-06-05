@@ -5,6 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/tier_sender_downloader.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/scheduler.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/main.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/my_functions.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/messages.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/node.c" isTestSource="false" />

@@ -17,16 +17,20 @@ int current_task_n = 0;
 XBT_LOG_NEW_DEFAULT_CATEGORY(scheduler, "messsages specific for scheduler");
 
 int comparator(void *a, void *b){
+    XBT_INFO("urochiy");
     msg_host_t hostA = *(msg_host_t*) a;
     msg_host_t hostB = *(msg_host_t*) b;
-    return MSG_host_get_speed(hostA) < MSG_host_get_speed(hostB);
+
+    double valA = MSG_host_get_speed(hostA);
+    double valB = MSG_host_get_speed(hostB);
+    return (valA > valB) - (valA < valB);
 }
 
 int contains(xbt_dynar_t* dynar, char* tier1_name){
     int cpt;
 
     for (cpt = 0; cpt < xbt_dynar_length(*dynar); ++cpt) {
-        char * string = * (char **) xbt_dynar_get_ptr(*dynar, cpt);
+        char* string = * (char **) xbt_dynar_get_ptr(*dynar, cpt);
         if (!memcmp(string, tier1_name, strlen(string))){
             return 1;
         }
@@ -140,7 +144,6 @@ xbt_dict_t match_task(xbt_dynar_t* dynar_host){
 
 int scheduler(int argc, char* argv[]){
     input();
-    xbt_dict_t map;
     char mailbox[30];
     char destination[50];
     msg_task_t task = NULL;
@@ -158,10 +161,12 @@ int scheduler(int argc, char* argv[]){
         // matching procedure; sending to dispatcher
         sprintf(destination, "%s_%s", MSG_host_get_name(MSG_task_get_source(task)), "ST");
         xbt_dynar_t dynar = MSG_task_get_data(task);
-        xbt_dynar_sort(dynar, comparator);
+        XBT_INFO("kokoko");
+        //xbt_dynar_sort(dynar, comparator);
+
         xbt_dict_t map = match_task(&dynar);
-        XBT_INFO("Start send after matching");
-        MSG_task_send(MSG_task_create("", 0, MESSAGES_SIZE, map), destination);
+        XBT_INFO("Start send after matching to %s", destination);
+        MSG_task_dsend(MSG_task_create("", 0, MESSAGES_SIZE, map), destination, NULL);
 
         MSG_task_destroy(task);
         task = NULL;

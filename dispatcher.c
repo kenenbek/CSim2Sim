@@ -3,6 +3,7 @@
 //
 #include <simgrid/msg.h>
 #include "messages.h"
+#include "tier_sender_downloader.h"
 
 XBT_LOG_NEW_DEFAULT_CATEGORY(dispatcher, "messsages specific for dispatching");
 
@@ -31,8 +32,9 @@ static int from_scheduler_to_tier(int argc, char *argv[]){
         msg_task_t task_t;
 
         xbt_dict_foreach(map, cursor, host, task_t){
+            XBT_INFO("Start to send %s to %s", MSG_task_get_name(task_t), host);
             MSG_task_send(task_t, host);
-            XBT_INFO("Send %s to %s", MSG_task_get_name(task_t), host);
+
         }
 
         //xbt_dict_free(map);
@@ -83,12 +85,15 @@ int dispatcher(int argc, char *argv[]){
     int num = xbt_str_parse_int(argv[1], "Invalid argument %s");
     int number_tiers = xbt_str_parse_int(argv[2], "Invalid argument %s");
 
-    char** newargv = xbt_new(char*, 3);  char** newargvx = xbt_new(char*, 3);
-    newargv[0] = xbt_strdup("TS"); newargvx[0] = xbt_strdup("ST");
-    newargv[1] = xbt_strdup(argv[1]); newargvx[1] = xbt_strdup(argv[1]);
+    char** newargv = xbt_new(char*, 3);  char** newargvx = xbt_new(char*, 3); char** newargvy = xbt_new(char*, 2);
+
+    newargv[0] = xbt_strdup("TS"); newargvx[0] = xbt_strdup("ST"); newargvy[0] = xbt_strdup("SD");
+    newargv[1] = xbt_strdup(argv[1]); newargvx[1] = xbt_strdup(argv[1]); newargvy[1] = xbt_strdup(argv[1]);
     newargv[2] = xbt_strdup(argv[2]); newargvx[2] = xbt_strdup(argv[2]);
+
     MSG_process_create_with_arguments("TS", from_tier_to_scheduler, NULL, MSG_host_self(), 3, newargv);
     MSG_process_create_with_arguments("ST", from_scheduler_to_tier, NULL, MSG_host_self(), 3, newargvx);
+    MSG_process_create_with_arguments("SD", tier_sender_downloader, NULL, MSG_host_self(), 2, newargvy);
 
     return 0;
 }

@@ -28,7 +28,6 @@ int tier1(int argc, char *argv[]){
     while(1){
 
         int res = MSG_task_receive(&task, mailbox);
-        XBT_INFO("Receive %s", MSG_task_get_name(task));
         xbt_assert(res == MSG_OK, "MSG_task_get fails");
 
         if(!strcmp(MSG_task_get_name(task), "finalize")){
@@ -39,40 +38,58 @@ int tier1(int argc, char *argv[]){
         message_t message = MSG_task_get_data(task);
         switch (message->type){
             case MONTE_CARLO:
+
+                XBT_INFO("Receive %s", MSG_task_get_name(task));
                 XBT_INFO("Start to execute Monte-Carlo %s", MSG_task_get_name(task));
                 message_t sms_from_task = MSG_task_get_data(task);
                 msg_task_t mc_task = MSG_task_create("", sms_from_task->flops_amount, 0, NULL);
                 MSG_task_execute(mc_task);
                 XBT_INFO("Finished execute Monte-Carlo %s", MSG_task_get_name(task));
+
                 MSG_task_destroy(mc_task);
+                MSG_task_destroy(task);
+                task = NULL;
+                XBT_INFO("Send a pilot message to dispatcherxx");
+                MSG_task_send(MSG_task_create("Request", 0, MESSAGES_SIZE, NULL), dispatcher_mail);
+
                 break;
             case INSTRUCTION:
+
+                XBT_INFO("Receive %s", MSG_task_get_name(task));
                 if (!strcmp(message->downloadfrom, MSG_host_get_name(MSG_host_self()))){
                     XBT_INFO("Start to execute %s.I have all data", MSG_task_get_name(task));
                     MSG_task_execute(task);
+                    XBT_INFO("Finished to execute %s", MSG_task_get_name(task));
+
                     MSG_task_destroy(task);
+                    task = NULL;
+                    XBT_INFO("Send a pilot message to dispatcher");
+                    MSG_task_send(MSG_task_create("Request", 0, MESSAGES_SIZE, NULL), dispatcher_mail);
+
                 } else{
                     msg_task_t gtask = give_me_data(MSG_task_get_name(task), message->flops_amount, message->size_data);
-                    XBT_INFO("xxxxxxxxxxxxx");
+                    XBT_INFO("Hey %s, give me data for %s", message->downloadfrom, MSG_task_get_name(task));
                     MSG_task_send(gtask, message->downloadfrom);
                     XBT_INFO("yyyyyyyyyy");
+
+                    MSG_task_destroy(task);
+                    task = NULL;
                 }
                 break;
-            case GIVEMEDATA:
-                // if other host will request data from this host
-                data = send_data(MSG_task_get_name(task), MSG_task_get_flops_amount(task), MSG_task_get_bytes_amount(task));
-                MSG_task_send(data, MSG_host_get_name(MSG_task_get_source(task)));
-                break;
+
             case DOWNLOADED:
+
+                XBT_INFO("Download data of %s from %s", MSG_task_get_name(task), sg_host_get_name(MSG_task_get_source(task)));
+                XBT_INFO("Start to execute %s", MSG_task_get_name(task));
                 MSG_task_execute(task);
+                XBT_INFO("Finished to execute %s", MSG_task_get_name(task));
+
                 MSG_task_destroy(task);
+                task = NULL;
+                XBT_INFO("Send a pilot message to dispatcher");
+                MSG_task_send(MSG_task_create("Request", 0, MESSAGES_SIZE, NULL), dispatcher_mail);
                 break;
         }
-
-        XBT_INFO("Send a pilot message to dispatcherxx");
-        MSG_task_destroy(task);
-        MSG_task_send(MSG_task_create("", 0, MESSAGES_SIZE, NULL), dispatcher_mail);
-        task = NULL;
     }
 
  }

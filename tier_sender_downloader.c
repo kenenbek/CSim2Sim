@@ -9,6 +9,8 @@ XBT_LOG_NEW_DEFAULT_CATEGORY(sender_downloader, "messsages specific for sending 
 
 int tier_sender_downloader(int argc, char *argv[]){
 
+    MSG_process_set_kill_time(MSG_process_self(), 100.0);
+
     char mailbox[80];
     msg_task_t task = NULL;
 

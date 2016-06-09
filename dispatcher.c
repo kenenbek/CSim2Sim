@@ -9,19 +9,22 @@ XBT_LOG_NEW_DEFAULT_CATEGORY(dispatcher, "messsages specific for dispatching");
 
 
 static int from_scheduler_to_tier(int argc, char *argv[]){
+    MSG_process_set_kill_time(MSG_process_self(), 100.0);
 
     msg_task_t task = NULL;
-    char mailbox[80];
+    char mailbox[80]; char node_name[80];
     xbt_dict_t map;
-    xbt_dict_cursor_t cursor = NULL;
+    xbt_dict_cursor_t cursor = NULL; int i;
 
     int id = xbt_str_parse_int(argv[1], "Invalid argument %s");
+    int num = xbt_str_parse_int(argv[2], "Invalid argument %s");
 
     sprintf(mailbox, "Tier1_%i_ST", id);
 
     while (1){
         int res = MSG_task_receive(&task, mailbox);
         XBT_INFO("Receive after matching");
+        XBT_INFO("%s", MSG_task_get_name(task));
 
         if(!strcmp(MSG_task_get_name(task), "finalize")){
             MSG_task_destroy(task);
@@ -46,6 +49,8 @@ static int from_scheduler_to_tier(int argc, char *argv[]){
 
 static int from_tier_to_scheduler(int argc, char **argv){
 
+    MSG_process_set_kill_time(MSG_process_self(), 100.0);
+
     char mailbox[80];
     msg_task_t task;
     msg_task_t m_pilot;
@@ -53,15 +58,18 @@ static int from_tier_to_scheduler(int argc, char **argv){
     int id = xbt_str_parse_int(argv[1], "Invalid argument %s");
 
 
-
     sprintf(mailbox, "dispatcher1_%i_TS", id);
 
     while (1){
         int res = MSG_task_receive(&task, mailbox);
+        if (res == MSG_OK){
+
+        }
         XBT_INFO("Received message from %s", MSG_host_get_name(MSG_task_get_source(task)));
 
         if(!strcmp(MSG_task_get_name(task), "finalize")){
             MSG_task_destroy(task);
+            MSG_process_kill(MSG_process_self());
             break;
         }
         xbt_dynar_t dynar = xbt_dynar_new(sizeof(char*), NULL);

@@ -16,6 +16,29 @@ int current_task_n = 0;
 
 XBT_LOG_NEW_DEFAULT_CATEGORY(scheduler, "messsages specific for scheduler");
 
+int killAllProcess(){
+    int i = 0;
+    int dispatcher_amount = 7;
+    char destination_TS[80];
+    char destination_ST[80];
+    char SD_name[80];
+
+    for (i = 0; i < dispatcher_amount; ++i) {
+        sprintf(destination_TS, "dispatcher1_%i_TS", i+1);
+        sprintf(destination_ST, "Tier1_%i_ST", i+1);
+        sprintf(SD_name, "Tier1_%i", i+1);
+
+        msg_task_t task_TS = MSG_task_create("finalize", 0, 0, 0);
+        msg_task_t task_ST = MSG_task_create("finalize", 0, 0, 0);
+        msg_task_t task_SD = MSG_task_create("finalize", 0, 0, 0);
+        MSG_task_dsend(task_TS, destination_TS, NULL);
+        MSG_task_dsend(task_ST, destination_ST, NULL);
+        MSG_task_dsend(task_SD, SD_name, NULL);
+        task_SD, task_ST, task_TS = NULL;
+    }
+    return 0;
+}
+
 int comparator(void *a, void *b){
     XBT_INFO("urochiy");
     msg_host_t hostA = *(msg_host_t*) a;
@@ -143,6 +166,10 @@ xbt_dict_t match_task(xbt_dynar_t* dynar_host){
 
 
 int scheduler(int argc, char* argv[]){
+
+    MSG_process_set_kill_time(MSG_process_self(), 100.0);
+
+    int count = 0;
     input();
     char mailbox[30];
     char destination[50];
@@ -151,6 +178,10 @@ int scheduler(int argc, char* argv[]){
     sprintf(mailbox, "scheduler");
 
     while (1){
+        if (count >= 100){
+            MSG_process_suspend(MSG_process_self());
+            break;
+        }
         int res = MSG_task_receive(&task, mailbox);
         XBT_INFO("Receive a pilot from %s", MSG_host_get_name(MSG_task_get_source(task)));
 
@@ -171,6 +202,7 @@ int scheduler(int argc, char* argv[]){
         MSG_task_destroy(task);
         task = NULL;
         map = NULL;
+        count++;
     }
 
     return 0;

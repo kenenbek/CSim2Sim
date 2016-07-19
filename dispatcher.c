@@ -37,7 +37,6 @@ static int from_scheduler_to_tier(int argc, char *argv[]){
         xbt_dict_foreach(map, cursor, host, task_t){
             XBT_INFO("Start to send %s to %s", MSG_task_get_name(task_t), host);
             MSG_task_send(task_t, host);
-
         }
 
         //xbt_dict_free(map);

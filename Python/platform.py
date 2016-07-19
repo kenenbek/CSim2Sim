@@ -14,12 +14,28 @@ SPEED = 133.3
 LATENCY = 0.0
 BANDWIDTH = 3.432
 
-f = open("../platform.xml", "w")
+#STORAGE OF TIER1
+STORAGE_CERN = 3,680,824 #GB
+STORAGE_CNAF = 5,566,296 #GB
+STORAGE_GRIDKA = 2,463,730 #GB
+STORAGE_IN2P3 = 1,550,202 # lapp-se01.in2p3.fr
+STORAGE_PIC = 6,957,442	# ? SINGLE VALUE OF
+STORAGE_RAL = 3,940,035 # GB
+STORAGE_SARA = 8,224,639 #	SINGLE VALUE OF	
+
+
+f = open("platform.xml", "w")
 f.write("<?xml version='1.0'?>\n")
 f.write("<!DOCTYPE platform SYSTEM \"http://simgrid.gforge.inria.fr/simgrid/simgrid.dtd\">\n")
 f.write("<platform version=\"4\">\n")
 f.write("\n\n")
 f.write("\t<AS id=\"AS_BIG\" routing=\"Full\">\n")
+
+#DEFINING STORAGES
+
+
+
+
 
 # DEFINING TIER0
 f.write("\t\t<AS id=\"Tier0X\" routing=\"Full\">\n")
@@ -114,7 +130,7 @@ f.close()
 
 
 # DEPLOYMENT FILE
-f = open("../deployment.xml", "w")
+f = open("deployment.xml", "w")
 f.write("<?xml version='1.0'?>\n")
 f.write("<!DOCTYPE platform SYSTEM \"http://simgrid.gforge.inria.fr/simgrid/simgrid.dtd\">\n")
 f.write("<platform version=\"4\">\n")
